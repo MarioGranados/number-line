@@ -22,55 +22,111 @@
         display: inline-block;
         border-radius: 50%;
         border: 1px solid blue;
+        position: absolute;
       }
 
-      #one {
-        top: 5px;
+      .line {
+        width: 80%;
+        background-color: black;
+        height: 5px;
+        position: relative;
+        top: 50vh;
+        display: flex;
+        justify-content: space-around;
+        margin: auto;
       }
-      #two {
-        top: 10px;
+      .tick {
+        height: 50px;
+        width: 5px;
+        position: relative;
+        background-color: black;
+      }
+      .numbers {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+        top: 60vh;
       }
     </style>
   </head>
   <body>
     <div id="container">
       <span class="dot" id="one"></span>
+      <span class="dot" id="two"></span>
+      <div class="line">
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+      </div>
+      <div class="numbers">
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>4</p>
+        <p>5</p>
+        <p>6</p>
+        <p>7</p>
+        <p>8</p>
+        <p>9</p>
+        <p>10</p>
+      </div>
     </div>
 
     <script>
       const point = document.getElementById("one");
+      const secondPoint = document.getElementById("two");
       const container = document.getElementById("container");
+
+      let el;
       let active = false;
-
-      let x, y;
-
-      let initialPosition = [x, y];
-      let currentPosition = [x, y];
-      let offSetPosition = [x, y];
+      let initialX = 0,
+        initialY = 0;
+      let currentX = 0,
+        currentY = 0;
 
       container.addEventListener("mousedown", handleStart, false);
       container.addEventListener("mouseup", handleStop, false);
       container.addEventListener("mousemove", handleDrag, false);
 
       function handleStart(e) {
-        // console.log(e.clientY);
-        let active = true;
-        initialPosition[0] = e.clientX;
-        initialPosition[1] = e.clientY;
-        console.log(initialPosition);
-        console.log(active);
+        console.log(e.clientY);
+        active = true;
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        el = e.target == point ? point : secondPoint;
+
+        // console.log('start');
+        // console.log(initialX);
+        // console.log(initialY);
       }
       function handleDrag(e) {
-        if(active) {
-            console.log('moving');
+        if (active) {
+          // console.log("moving");
+          currentX = e.clientX;
+          currentY = e.clientY;
+          dragElement(currentX, currentY, el);
+          //   console.log(e);
         }
-
       }
       function handleStop(e) {
-        console.log('stopped');
-        initialPosition[0] = e.clientX;
-        initialPosition[1] = e.clientY;
-        let active = false;
+        // console.log("stopped");
+        initialX = currentX;
+        initialY = currentY;
+        active = false;
+      }
+
+      function dragElement(xPos, yPos, el) {
+        el.style.transform = "translate3d(" + xPos + "px, " + 49 + "vh, 0)";
       }
     </script>
   </body>

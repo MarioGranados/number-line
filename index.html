@@ -12,7 +12,7 @@
       #container {
         width: 100%;
         height: 100vh;
-        background-color: green;
+        background-color: #fff;
         margin: auto;
       }
       .dot {
@@ -21,7 +21,7 @@
         background-color: black;
         display: inline-block;
         border-radius: 50%;
-        border: 1px solid blue;
+        border: 1px solid black;
         position: absolute;
       }
 
@@ -48,6 +48,12 @@
         justify-content: space-around;
         position: relative;
         top: 60vh;
+      }
+      .border-shadow {
+        width: 20px;
+        background-color: #074a7a;
+        border-radius:50%;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.54);
       }
     </style>
   </head>
@@ -91,12 +97,15 @@
       let el;
       let active = false; // determines if we are still dragging any points
       let flag = true;
-      let initialX = 0,
-        initialY = 0; //start
-      let currentX = 0,
-        currentY = 0; //update
-        let stopX = 0;
-        let stopY = 0;
+      let initialX = 0;
+      let initialY = 0; //start
+      let currentX = 0;
+      let currentY = 0; //update
+      let stopX = 0;
+      let stopY = 0;
+
+      var prevTick;
+      var nextTick;
 
       //event listeners waiting for mouse events
       container.addEventListener("mousedown", handleStart, false);
@@ -120,28 +129,33 @@
 
           el = e.target == point ? point : secondPoint;
         }
-        // console.log('start');
-        // console.log(initialX);
-        // console.log(initialY);
+
       }
       function handleDrag(e) {
         if (active) {
           // console.log("moving");
+
+          el.classList.add("border-shadow");
+
           currentX = e.clientX;
           currentY = e.clientY;
           dragElement(currentX, currentY, el);
-
           if(tickPosition.includes(currentX.toFixed())) {
-            prev = tickPosition.indexOf(currentX.toFixed());
-            console.log(true);
+            prevTick = tickPosition.indexOf(currentX.toFixed());
+            nextTick = prevTick + 1;
+            console.log(prevTick);
           }
         }
       }
       function handleStop(e) {
         // console.log("stopped");
-        snapToNearestTick(el);
-        stopX = currentX
-        stopY = currentY;
+
+        //allow user to see what is active
+        el.classList.remove("border-shadow");
+
+        snapToNearestTick(tickPosition[prevTick], tickPosition[nextTick], el, currentX);
+        initialX = currentX
+        initialY = currentY;
         active = false;
       }
 
@@ -151,10 +165,6 @@
 
       //find each tick;
       let ticks = document.getElementsByClassName("tick");
-
-      //   console.log(tick[0]);
-      //   console.log(tick[1].getBoundingClientRect().left); // y axis
-      //   console.log(tick[0].getBoundingClientRect().top) = //this is the x axis
 
       //for code readability we push our elements into a different array
       let tickPosition = [];
@@ -166,10 +176,25 @@
       }
        console.log(tickPosition)
 
-      function snapToNearestTick(el) {
-        el.style.transform = "translate3d(" + 0 + "px, " + 49 + "vh, 0)";
+      function snapToNearestTick(prev, next, el, xPos) {
+        middleTickPosition = prev + next / 2;
+        if(xPos >= middleTickPosition) {
+          el.style.transform = "translate3d(" + next + "px, " + 49 + "vh, 0)";
+        } else {
+          el.style.transform = "translate3d(" + prev + "px, " + 49 + "vh, 0)";
+        }
+      }
+
+      function bolderLineEffect() {
 
       }
+
+    /*step 1 create draggable circles*/
+    //  step 2 create a line
+      //step 3 make circles draggable on line (x-axis)
+      // step 4 create ticks and find their positions
+      // step 5 snap circles to ticks that are closes to them
+      // step 6 area between ticks, make bolder
     </script>
   </body>
 </html>

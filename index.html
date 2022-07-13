@@ -82,29 +82,42 @@
     </div>
 
     <script>
+      //grab elements from the DOM and store for easier reading
       const point = document.getElementById("one");
       const secondPoint = document.getElementById("two");
       const container = document.getElementById("container");
 
+      //these variables will be overwritten
       let el;
-      let active = false;
+      let active = false; // determines if we are still dragging any points
+      let flag = true;
       let initialX = 0,
-        initialY = 0;
+        initialY = 0; //start
       let currentX = 0,
-        currentY = 0;
+        currentY = 0; //update
 
+      //event listeners waiting for mouse events
       container.addEventListener("mousedown", handleStart, false);
       container.addEventListener("mouseup", handleStop, false);
       container.addEventListener("mousemove", handleDrag, false);
 
+      //handle events
       function handleStart(e) {
-        console.log(e.clientY);
-        active = true;
-        initialX = e.clientX;
-        initialY = e.clientY;
+        // console.log(e.clientY);
+        if (flag) {
+          active = true;
+          initialX = 200;
+          initialY = 429;
 
-        el = e.target == point ? point : secondPoint;
+          el = e.target == point ? point : secondPoint; //determines what point we are dragging
+          flag = false;
+        } else {
+          active = true;
+          initialX = e.clientX;
+          initialY = e.clientY;
 
+          el = e.target == point ? point : secondPoint;
+        }
         // console.log('start');
         // console.log(initialX);
         // console.log(initialY);
@@ -115,7 +128,11 @@
           currentX = e.clientX;
           currentY = e.clientY;
           dragElement(currentX, currentY, el);
-          //   console.log(e);
+
+          if(tickPosition.includes(currentX.toFixed())) {
+            let i = tickPosition.indexOf(currentX.toFixed());
+            console.log(true);
+          }
         }
       }
       function handleStop(e) {
@@ -127,6 +144,30 @@
 
       function dragElement(xPos, yPos, el) {
         el.style.transform = "translate3d(" + xPos + "px, " + 49 + "vh, 0)";
+      }
+
+      //find each tick;
+      let ticks = document.getElementsByClassName("tick");
+
+      //   console.log(tick[0]);
+      //   console.log(tick[1].getBoundingClientRect().left); // y axis
+      //   console.log(tick[0].getBoundingClientRect().top) = //this is the x axis
+
+      //for code readability we push our elements into a different array
+      let tickPosition = [];
+      let middleTickPosition;
+
+      //push elements for easier read
+      for (let i = 0; i < ticks.length; i++) {
+        tickPosition.push(ticks[i].getBoundingClientRect().left.toFixed());
+      }
+       console.log(tickPosition)
+
+      function snapToNearestTick(previousTick, nextTick, xPos, el) {
+        xPos >= middleTickPosition ? nextTick : previousTick;
+        middleTickPosition = (previousTick + nextTick) / 2;
+        el.style.transformOrigin = '0' + "210px";
+
       }
     </script>
   </body>

@@ -95,6 +95,8 @@
         initialY = 0; //start
       let currentX = 0,
         currentY = 0; //update
+        let stopX = 0;
+        let stopY = 0;
 
       //event listeners waiting for mouse events
       container.addEventListener("mousedown", handleStart, false);
@@ -130,15 +132,16 @@
           dragElement(currentX, currentY, el);
 
           if(tickPosition.includes(currentX.toFixed())) {
-            let i = tickPosition.indexOf(currentX.toFixed());
+            prev = tickPosition.indexOf(currentX.toFixed());
             console.log(true);
           }
         }
       }
       function handleStop(e) {
         // console.log("stopped");
-        initialX = currentX;
-        initialY = currentY;
+        snapToNearestTick(el);
+        stopX = currentX
+        stopY = currentY;
         active = false;
       }
 
@@ -163,10 +166,8 @@
       }
        console.log(tickPosition)
 
-      function snapToNearestTick(previousTick, nextTick, xPos, el) {
-        xPos >= middleTickPosition ? nextTick : previousTick;
-        middleTickPosition = (previousTick + nextTick) / 2;
-        el.style.transformOrigin = '0' + "210px";
+      function snapToNearestTick(el) {
+        el.style.transform = "translate3d(" + 0 + "px, " + 49 + "vh, 0)";
 
       }
     </script>

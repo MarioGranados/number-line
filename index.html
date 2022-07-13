@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap demo</title>
+    <title>Number Line</title>
+
     <style>
       * {
         padding: 0;
@@ -55,6 +56,9 @@
         border-radius:50%;
         box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.54);
       }
+      .text-center {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -85,6 +89,10 @@
         <p>9</p>
         <p>10</p>
       </div>
+      <div class="text-center">
+        <h2>Line Graph Example</h2>
+        <p>Drag the dots anywhere on the line graph!</p>
+      </div>
     </div>
 
     <script>
@@ -108,9 +116,15 @@
       var nextTick;
 
       //event listeners waiting for mouse events
-      container.addEventListener("mousedown", handleStart, false);
-      container.addEventListener("mouseup", handleStop, false);
-      container.addEventListener("mousemove", handleDrag, false);
+      container.addEventListener("mousedown", handleStart);
+      container.addEventListener("mouseup", handleStop);
+      container.addEventListener("mousemove", handleDrag);
+
+      //event listeners waiting for mouse events
+      container.addEventListener("touchstart", handleStart);
+      container.addEventListener("touchmove", handleStop);
+      container.addEventListener("touchend", handleDrag);
+
 
       //handle events
       function handleStart(e) {
